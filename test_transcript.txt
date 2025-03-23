@@ -1,0 +1,68 @@
+Date: October 25, 2023
+Time: 10:00 AM - 11:30 AM
+Location: Virtual (Zoom)
+Attendees:
+
+    Alex Carter (Project Manager)
+
+    Jamie Lee (Lead Developer)
+
+    Taylor Morgan (UX Designer)
+
+    Sam Patel (Marketing Lead)
+
+    Casey Kim (QA Analyst)
+
+Alex Carter:
+"Alright, everyone, thanks for joining. Let’s get started. Today’s agenda is to finalize the scope for Project Phoenix and assign action items. Jamie, can you give us a quick update on the development timeline?"
+
+Jamie Lee:
+"Sure. We’re on track for the initial build. The backend is about 70% complete, but we’re blocked on the API integration with the payment gateway. I’ve reached out to their support team, but no response yet. I’ll follow up again today."
+
+Alex Carter:
+"Got it. Let’s make that an action item. Jamie, follow up with the payment gateway team by end of day today. If you don’t hear back by tomorrow, escalate it to me. Next, Taylor, how’s the UX design coming along?"
+
+Taylor Morgan:
+"The wireframes for the main dashboard are done, and I’ve shared them with the team for feedback. I’m waiting on Sam to confirm the branding colors so I can finalize the UI design."
+
+Alex Carter:
+"Sam, can you prioritize that? Taylor needs those colors to move forward."
+
+Sam Patel:
+"Absolutely. I’ll have the finalized branding guide sent to Taylor by tomorrow morning. Also, I’ve started drafting the launch campaign, but I need some key features from Jamie to include in the messaging."
+
+Jamie Lee:
+"I’ll send you a list of the top three features by end of day today."
+
+Alex Carter:
+"Great. Let’s make that another action item. Jamie, send Sam the key features list by EOD. Casey, any updates from the QA side?"
+
+Casey Kim:
+"We’ve started testing the login module, and so far, so good. I’ll need access to the staging environment by next week to test the full flow. Jamie, can you confirm when that will be ready?"
+
+Jamie Lee:
+"Staging should be ready by Monday. I’ll send you the credentials as soon as it’s up."
+
+Alex Carter:
+"Perfect. Casey, your action item is to begin full testing on Monday. Let’s also schedule a follow-up meeting for next Wednesday to review progress. I’ll send out a calendar invite. Any other questions or concerns?"
+
+Taylor Morgan:
+"Just one thing. I noticed the mobile responsiveness isn’t fully baked into the current build. Jamie, can we prioritize that?"
+
+Jamie Lee:
+"Yep, I’ll add it to the sprint. I’ll update the team by Friday on the timeline for that."
+
+Alex Carter:
+"Alright, sounds like we’re in good shape. Let’s recap the action items:
+
+    Jamie to follow up with the payment gateway team by EOD today.
+
+    Sam to send the finalized branding guide to Taylor by tomorrow morning.
+
+    Jamie to send the key features list to Sam by EOD today.
+
+    Casey to begin full testing on Monday.
+
+    Jamie to update the team on mobile responsiveness by Friday.
+
+Thanks, everyone. Let’s keep the momentum going. Meeting adjourned!"

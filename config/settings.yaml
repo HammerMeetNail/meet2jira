@@ -1,0 +1,24 @@
+# Application Configuration
+app:
+  log_level: ${LOG_LEVEL:INFO}
+  max_retries: 3
+  retry_delay: 5
+
+# Jira Configuration
+jira:
+  url: ${JIRA_URL}
+  project_key: ${JIRA_PROJECT_KEY}
+  default_issue_type: Task
+  field_mappings:
+    summary: title
+    description: description
+    issuetype: type
+    priority: priority
+    labels: labels
+
+# LLM Configuration
+llm:
+  model_path: ${LLM_MODEL_PATH}
+  temperature: ${LLM_TEMPERATURE:0.7}
+  max_tokens: ${LLM_MAX_TOKENS:2048}
+  system_prompt: prompts/system_prompt.txt
