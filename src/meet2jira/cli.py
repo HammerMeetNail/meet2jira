@@ -13,11 +13,12 @@ def main():
     parser.add_argument('--dry-run', action='store_true', help='Run without creating Jira issues')
     parser.add_argument('--verbose', '-v', action='store_true', help='Show detailed output including parsed transcript')
     parser.add_argument('--list-models', '-l', action='store_true', help='List available Ollama models')
+    parser.add_argument('--transcript', '-t', required=False, help='Meeting transcript text or path to transcript file')
     args = parser.parse_args()
 
-    # Add transcript argument after parsing args
-    parser.add_argument('--transcript', '-t', required=not args.list_models, help='Meeting transcript text or path to transcript file')
-    args = parser.parse_args()
+    # Validate arguments
+    if not args.list_models and not args.transcript:
+        parser.error('--transcript is required unless --list-models is specified')
 
     # List models if requested
     if args.list_models:
