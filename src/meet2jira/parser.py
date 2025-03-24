@@ -4,8 +4,9 @@ import json
 from typing import Dict, Any
 
 class MeetingParser:
-    def __init__(self):
+    def __init__(self, model: str = 'llama2'):
         self.logger = logging.getLogger(__name__)
+        self.model = model
         
     def _get_llm_prompt(self, transcript: str) -> str:
         """Generate the LLM prompt using the system prompt template"""
@@ -13,7 +14,9 @@ class MeetingParser:
             system_prompt = f.read()
         return f"{system_prompt}\n\nMeeting Transcript:\n{transcript}"
 
-    def parse(self, transcript: str) -> Dict[str, Any]:
+    def parse(self, transcript: str, model: str = None) -> Dict[str, Any]:
+        # Use provided model or fall back to instance default
+        model = model or self.model
         """Parse meeting transcript and extract actionable items using LLM"""
         self.logger.info("Parsing meeting transcript with LLM")
         
@@ -21,8 +24,9 @@ class MeetingParser:
             # Generate prompt and get LLM response
             prompt = self._get_llm_prompt(transcript)
             response = ollama.generate(
-                model="granite-3.2-8b-instruct-q8_0:latest",
+                model=model,
                 prompt=prompt,
+                options={"num_ctx": 24576},
                 format="json"
             )
             
@@ -39,7 +43,8 @@ class MeetingParser:
                         "labels": issue.get("labels", [])
                     }
                     for issue in parsed.get("issues", [])
-                ]
+                ],
+                "raw_response": parsed
             }
             
         except Exception as e:

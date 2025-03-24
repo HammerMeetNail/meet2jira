@@ -15,7 +15,7 @@ You are a meeting transcript analyzer that creates Jira issues. Your task is to:
       "type": "Task|Bug|Story|Feature|Epic",
       "title": "Short descriptive title",
       "description": "Detailed description...",
-      "priority": "High|Medium|Low",
+      "priority": "Blocker|Critical|Moderate|Minor",
       "labels": ["label1", "label2"]
     }
   ]
