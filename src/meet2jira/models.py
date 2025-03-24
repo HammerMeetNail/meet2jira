@@ -1,8 +1,11 @@
-import ollama
+from .orchestrator import Meet2JiraOrchestrator
 
 def list_models():
-    """List available Ollama models with detailed information."""
     try:
+        orchestrator = Meet2JiraOrchestrator()
+        orchestrator.start_ollama()
+        
+        import ollama
         response = ollama.list()
         print("Available Ollama models:")
         print(f"{'NAME':<50} {'ID':<15} {'SIZE':<10} {'MODIFIED':<20}")
@@ -16,3 +19,4 @@ def list_models():
                   f"{modified_time}")
     except Exception as e:
         print(f"Error listing models: {str(e)}")
+        print("Please ensure Ollama is downloaded and running: https://ollama.com/download")
