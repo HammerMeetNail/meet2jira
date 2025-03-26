@@ -64,12 +64,25 @@ class Meet2JiraOrchestrator:
             if dry_run:
                 created_issues.append(issue)
             else:
-                try:
-                    result = self.jira_client.create_issue(issue)
-                    created_issues.append(result)
-                    self.logger.info(f"Created issue: {result['key']}")
-                except Exception as e:
-                    self.logger.error(f"Failed to create issue: {str(e)}")
+                # Show issue details and prompt for approval
+                print(f"\nProposed Jira Issue:")
+                print(f"Title: {issue['title']}")
+                print(f"Type: {issue['type']}")
+                print(f"Priority: {issue['priority']}")
+                print(f"Labels: {', '.join(issue['labels'])}")
+                print(f"Description:\n{issue['description']}\n")
+                
+                response = input("Create this issue? (y/n): ").strip().lower()
+                if response == 'y':
+                    try:
+                        result = self.jira_client.create_issue(issue)
+                        created_issues.append(result)
+                        self.logger.info(f"Created issue: {result['key']}")
+                    except Exception as e:
+                        self.logger.error(f"Failed to create issue: {str(e)}")
+                        continue
+                else:
+                    self.logger.info(f"Skipped creating issue: {issue['title']}")
                     continue
                 
         return created_issues, parsed_issues['raw_response']
