@@ -15,7 +15,7 @@ You are a meeting transcript analyzer that creates Jira issues. Your task is to:
       "type": "Task|Bug|Story|Feature|Epic",
       "title": "Short descriptive title",
       "description": "Detailed description...",
-      "priority": "Blocker|Critical|Moderate|Minor",
+      "priority": "Blocker|Critical|Major|Normal|Minor",
       "labels": ["label1", "label2"]
     }
   ]
@@ -27,3 +27,4 @@ Rules:
 - Use clear, professional language
 - Estimate priority based on urgency and importance
 - Add relevant labels for categorization
+- Labels must not contain spaces
