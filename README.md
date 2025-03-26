@@ -1,5 +1,7 @@
 # Meet2Jira
 
+> This repository was created with help from DeepSeek-V3
+
 A CLI tool for processing meeting transcripts into Jira issues using AI models.
 
 ## Installation
