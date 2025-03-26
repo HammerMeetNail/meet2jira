@@ -9,7 +9,7 @@ A CLI tool for processing meeting transcripts into Jira issues using AI models.
 1. Install Ollama and download the model:
 ```bash
 curl -fsSL https://ollama.com/install.sh | sh
-ollama pull granite-3.2-8b-instruct-q8_0:latest
+ollama pull qwen2.5-coder:7b
 ```
 
 2. Clone the repository:
@@ -18,9 +18,15 @@ git clone https://github.com/yourusername/meet2jira.git
 cd meet2jira
 ```
 
-2. Install the package in editable mode:
+3. Install the package in editable mode:
 ```bash
 pip install -e .
+```
+
+4. (Optional) Import models from LM Studio to Ollama
+```bash
+go install github.com/sammcj/gollama@HEAD
+gollama -link-lmstudio -lm-dir /Users/$USER/.lmstudio/models
 ```
 
 ## Configuration
@@ -37,7 +43,7 @@ JIRA_API_TOKEN=your-api-token
 ### Basic Usage
 ```bash
 # Dry Run does not require env variables
-meet2jira --dry-run --transcript test_transcript.txt --model granite-3.2-8b-instruct-q8_0:latest
+meet2jira --dry-run --transcript test_transcript.txt --model qwen2.5-coder:7b
 ```
 
 ### Options
