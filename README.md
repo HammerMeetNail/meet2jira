@@ -4,7 +4,13 @@ A CLI tool for processing meeting transcripts into Jira issues using AI models.
 
 ## Installation
 
-1. Clone the repository:
+1. Install Ollama and download the model:
+```bash
+curl -fsSL https://ollama.com/install.sh | sh
+ollama pull granite-3.2-8b-instruct-q8_0:latest
+```
+
+2. Clone the repository:
 ```bash
 git clone https://github.com/yourusername/meet2jira.git
 cd meet2jira
@@ -15,11 +21,21 @@ cd meet2jira
 pip install -e .
 ```
 
+## Configuration
+
+Export the following environment variables:
+```env
+JIRA_URL=https://your-domain.atlassian.net
+JIRA_USER=your@email.com
+JIRA_API_TOKEN=your-api-token
+```
+
 ## Usage
 
 ### Basic Usage
 ```bash
-meet2jira --transcript /path/to/transcript.txt
+# Dry Run does not require env variables
+meet2jira --dry-run --transcript test_transcript.txt --model granite-3.2-8b-instruct-q8_0:latest
 ```
 
 ### Options
@@ -28,37 +44,6 @@ meet2jira --transcript /path/to/transcript.txt
 - `--verbose`, `-v`: Show detailed output including parsed transcript
 - `--list-models`, `-l`: List available Ollama models
 - `--transcript`, `-t`: Meeting transcript text or path to transcript file
-
-### Examples
-
-1. Process a transcript file:
-```bash
-meet2jira --transcript meeting.txt
-```
-
-2. List available models:
-```bash
-meet2jira --list-models
-```
-
-3. Dry run with verbose output:
-```bash
-meet2jira --transcript meeting.txt --dry-run --verbose
-```
-
-4. Use a specific model:
-```bash
-meet2jira --transcript meeting.txt --model mistral
-```
-
-## Configuration
-
-Create a `.env` file in the project root with your Jira credentials:
-```env
-JIRA_URL=https://your-domain.atlassian.net
-JIRA_USER=your@email.com
-JIRA_API_TOKEN=your-api-token
-```
 
 ## Development
 
