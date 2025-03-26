@@ -85,4 +85,4 @@ class Meet2JiraOrchestrator:
                     self.logger.info(f"Skipped creating issue: {issue['title']}")
                     continue
                 
-        return created_issues, parsed_issues['raw_response']
+        return created_issues, ""
