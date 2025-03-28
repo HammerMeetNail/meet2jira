@@ -4,14 +4,17 @@ import atexit
 import os
 import time
 import requests
-from typing import List, Dict
+import uuid
+from typing import List, Dict, Optional
 from .parser import MeetingParser
 from .jira_client import JiraClient
+from .report_storage import ReportStorage
 
 class Meet2JiraOrchestrator:
     def __init__(self):
         self.logger = logging.getLogger(__name__)
         self.jira_client = JiraClient()
+        self.report_storage = ReportStorage()
         self.parser = None
         self.ollama_process = None
         atexit.register(self.cleanup_ollama)
@@ -48,6 +51,51 @@ class Meet2JiraOrchestrator:
                 self.ollama_process.wait(timeout=5)
             except subprocess.TimeoutExpired:
                 self.ollama_process.kill()
+
+    def generate_status_report(self, jql: str, model: str = 'llama2') -> dict:
+        """Generate a status report from Jira issues matching the JQL"""
+        self.start_ollama()
+        self.parser = MeetingParser(model=model)
+        
+        # Get current issues from Jira
+        issues = self.jira_client.get_issues_by_jql(jql)
+        if not issues:
+            return {"error": "No issues found matching the JQL query"}
+            
+        # Get previous report for comparison
+        previous_report = self.report_storage.get_previous_report(jql)
+        
+        # Generate report ID and save current state
+        report_id = str(uuid.uuid4())
+        self.report_storage.save_report(report_id, jql, issues)
+        
+        # Prepare context for LLM
+        report_context = {
+            'current_issues': [
+                {
+                    'key': issue['key'],
+                    'status': issue['fields']['status']['name'],
+                    'assignee': issue['fields']['assignee']['displayName'] if issue['fields']['assignee'] else 'Unassigned',
+                    'summary': issue['fields']['summary'],
+                    'priority': issue['fields']['priority']['name'],
+                    'created': issue['fields']['created'],
+                    'updated': issue['fields']['updated']
+                }
+                for issue in issues
+            ],
+            'previous_report': previous_report['issues'] if previous_report else None
+        }
+        
+        # Generate summary using LLM
+        summary = self.parser.generate_report_summary(report_context, model=model)
+        
+        return {
+            'report_id': report_id,
+            'jql': jql,
+            'issue_count': len(issues),
+            'summary': summary,
+            'previous_report': previous_report
+        }
 
     def process_transcript(self, transcript: str, model: str = 'llama2', dry_run: bool = False) -> tuple[List[Dict], str]:
         """Process meeting transcript and create Jira issues"""

@@ -77,3 +77,44 @@ class TestCLI:
         assert 'Priority: Major' in captured.out
         assert 'Labels: test' in captured.out
         assert 'Description:\nTest description' in captured.out
+
+    def test_cli_generate_report(self, mock_orchestrator, capsys):
+        """Test CLI report generation"""
+        mock_orchestrator.generate_status_report.return_value = {
+            'issue_count': 2,
+            'summary': 'Test summary',
+            'jql': 'project = TEST'
+        }
+        test_args = ['meet2jira', '--report', 'project = TEST', '--model', 'test-model']
+        with patch('sys.argv', test_args):
+            main()
+        
+        mock_orchestrator.generate_status_report.assert_called_once_with(
+            'project = TEST',
+            model='test-model'
+        )
+        captured = capsys.readouterr()
+        assert 'Generated status report for 2 issues' in captured.out
+        assert 'JQL: project = TEST' in captured.out
+        assert 'Summary: Test summary' in captured.out
+
+    def test_cli_generate_report_no_issues(self, mock_orchestrator, capsys):
+        """Test CLI report generation with no matching issues"""
+        mock_orchestrator.generate_status_report.return_value = {
+            'error': 'No issues found matching the JQL query'
+        }
+        test_args = ['meet2jira', '--report', 'project = TEST', '--model', 'test-model']
+        with patch('sys.argv', test_args):
+            main()
+        
+        captured = capsys.readouterr()
+        assert 'No issues found matching the JQL query' in captured.out
+
+    def test_cli_mutually_exclusive_args(self, capsys):
+        """Test CLI with mutually exclusive arguments"""
+        test_args = ['meet2jira', '--transcript', 'test.txt', '--report', 'project = TEST']
+        with patch('sys.argv', test_args), pytest.raises(SystemExit):
+            main()
+        
+        captured = capsys.readouterr()
+        assert '--transcript and --report are mutually exclusive' in captured.err

@@ -107,3 +107,60 @@ class TestMeet2JiraOrchestrator:
             mock_get.return_value.ok = False
             with pytest.raises(RuntimeError, match='Failed to start Ollama service'):
                 orchestrator.start_ollama()
+
+    def test_generate_status_report_success(self, mock_parser, mock_jira, mock_ollama):
+        """Test successful status report generation"""
+        # Mock Jira client to return test issues
+        mock_jira_instance = MagicMock()
+        mock_jira_instance.get_issues_by_jql.return_value = [
+            {'key': 'TEST-1', 'fields': {'summary': 'Test issue 1'}},
+            {'key': 'TEST-2', 'fields': {'summary': 'Test issue 2'}}
+        ]
+        mock_jira.return_value = mock_jira_instance
+
+        # Mock parser to return test summary
+        mock_parser_instance = MagicMock()
+        mock_parser_instance.generate_report_summary.return_value = "Test summary"
+        mock_parser.return_value = mock_parser_instance
+
+        orchestrator = Meet2JiraOrchestrator()
+        report = orchestrator.generate_status_report("project = TEST", model='test-model')
+
+        assert report['issue_count'] == 2
+        assert report['summary'] == "Test summary"
+        assert report['jql'] == "project = TEST"
+        mock_jira_instance.get_issues_by_jql.assert_called_once_with("project = TEST")
+
+    def test_generate_status_report_no_issues(self, mock_jira):
+        """Test report generation with no matching issues"""
+        mock_jira_instance = MagicMock()
+        mock_jira_instance.get_issues_by_jql.return_value = []
+        mock_jira.return_value = mock_jira_instance
+
+        orchestrator = Meet2JiraOrchestrator()
+        report = orchestrator.generate_status_report("project = TEST", model='test-model')
+
+        assert report['error'] == "No issues found matching the JQL query"
+        assert 'issue_count' not in report
+
+    def test_generate_status_report_with_previous(self, mock_parser, mock_jira):
+        """Test report generation with previous report comparison"""
+        # Mock Jira client and report storage
+        mock_jira_instance = MagicMock()
+        mock_jira_instance.get_issues_by_jql.return_value = [
+            {'key': 'TEST-1', 'fields': {'summary': 'Test issue 1'}}
+        ]
+        mock_jira.return_value = mock_jira_instance
+
+        # Mock parser to check previous report context
+        mock_parser_instance = MagicMock()
+        def check_context(context, model):
+            assert 'previous_report' in context
+            return "Test summary with comparison"
+        mock_parser_instance.generate_report_summary.side_effect = check_context
+        mock_parser.return_value = mock_parser_instance
+
+        orchestrator = Meet2JiraOrchestrator()
+        report = orchestrator.generate_status_report("project = TEST", model='test-model')
+
+        assert report['summary'] == "Test summary with comparison"

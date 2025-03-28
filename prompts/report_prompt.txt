@@ -1,0 +1,19 @@
+You are an expert project manager analyzing Jira issues. Generate a comprehensive status report based on the following data:
+
+Current Issues:
+{current_issues}
+
+Previous Report (if available):
+{previous_report}
+
+The report should include:
+1. Summary of current status (counts by status, priority, assignee)
+2. Key trends and observations
+3. Comparison with previous report (if available)
+4. Notable changes in issue statuses
+5. Any blockers or risks identified
+6. Recommendations for next steps
+
+Format the report clearly with sections and bullet points. Be concise but thorough. Focus on actionable insights.
+
+Status Report:
